@@ -11,30 +11,34 @@ You can integrate GlamAR into your project using one of the following dependency
 ### Swift Package Manager (SPM)
 
 1. In Xcode, select "File" → "Add Packages..."
-2. Enter the following URL in the search bar: https://github.com/pixelbin-io/glamar-swift.git
+2. Enter the following URL in the search bar: <https://github.com/pixelbin-io/glamar-swift.git>
 3. Select the version you want to use
 4. Click "Add Package"
 
 ### CocoaPods
 
 1. If you haven't already, install CocoaPods:
-   ```
-   $ gem install cocoapods
+
+   ```bash
+   gem install cocoapods
    ```
 
 2. In your project directory, create a `Podfile` if you don't have one:
-   ```
-   $ pod init
+
+   ```bash
+   pod init
    ```
 
 3. Add the following line to your Podfile:
+
    ```ruby
    pod 'GlamAR'
    ```
 
 4. Run the following command:
-   ```
-   $ pod install
+
+   ```bash
+   pod install
    ```
 
 5. Open the `.xcworkspace` file to work with your project in Xcode.
@@ -42,23 +46,27 @@ You can integrate GlamAR into your project using one of the following dependency
 ### Carthage
 
 1. If you haven't already, install Carthage:
-   ```
-   $ brew install carthage
+
+   ```bash
+   brew install carthage
    ```
 
 2. In your project directory, create a `Cartfile` if you don't have one:
-   ```
-   $ touch Cartfile
+
+   ```bash
+   touch Cartfile
    ```
 
 3. Add the following line to your Cartfile:
-   ```
+
+   ```ruby
    github "pixelbin-io/glamar-swift"
    ```
 
 4. Run the following command:
-   ```
-   $ carthage update --use-xcframeworks
+
+   ```bash
+   carthage update --use-xcframeworks
    ```
 
 5. In your target's "General" settings, add the built `GlamAR.xcframework` from `Carthage/Build` to the "Frameworks, Libraries, and Embedded Content" section.
@@ -112,7 +120,7 @@ import GlamAR
 
 class ViewController: UIViewController {
     @IBOutlet weak var glamArView: GlamArView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Setup GlamArView
@@ -210,20 +218,20 @@ class ViewController: UIViewController {
     @IBAction func onApplyClick(_ sender: Any) {
         self.glamArView.applySku(skuId: "666b311f-1b34-4082-99d1-c525451b44a1", category: "beauty")
     }
-    
+
     @IBAction func onClearClick(_ sender: Any) {
         self.glamArView.clear()
     }
-    
+
     @IBAction func onToggleClick(_ sender: Any) {
         showingOriginal = !showingOriginal
         self.glamArView.toggle(showOriginal: showingOriginal)
     }
-    
+
     @IBAction func onExportClick(_ sender: Any) {
         self.glamArView.snapshot()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.glamArView.startPreview(previewMode: .none)
