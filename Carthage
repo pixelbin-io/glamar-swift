@@ -1,0 +1,3 @@
+github "pixelbin-io/glamar-swift" ~> 1.0.0
+github "Alamofire/Alamofire" ~> 5.9.1  # Alamofire dependency
+
