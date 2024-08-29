@@ -1,24 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fb1-oF-Q9h">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <scene sceneID="MGA-8K-Q9w">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <viewController id="fb1-oF-Q9h" customClass="ViewController" customModule="UIKitSample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xT3-Ky-9XC">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="STU-QW-0z7">
+                                <rect key="frame" x="164.66666666666666" y="678" width="64" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Clear"/>
+                                <connections>
+                                    <action selector="onClearClick:" destination="fb1-oF-Q9h" eventType="touchUpInside" id="WYc-xV-Rk4"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZLi-Du-3FZ">
+                                <rect key="frame" x="158.66666666666666" y="713" width="76" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Toggle"/>
+                                <connections>
+                                    <action selector="onToggleClick:" destination="fb1-oF-Q9h" eventType="touchUpInside" id="2L7-0U-AbY"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kWG-M1-Tmi">
+                                <rect key="frame" x="159" y="748" width="75" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Export"/>
+                                <connections>
+                                    <action selector="onExportClick:" destination="fb1-oF-Q9h" eventType="touchUpInside" id="rni-od-jy1"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5oY-iH-1Ow">
+                                <rect key="frame" x="162.66666666666666" y="783" width="68" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Apply"/>
+                                <connections>
+                                    <action selector="onApplyClick:" destination="fb1-oF-Q9h" eventType="touchUpInside" id="ZHe-aT-LPD"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U0B-ro-XxI" customClass="GlamArView" customModule="GlamAR">
+                                <rect key="frame" x="0.0" y="59" width="393" height="619"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="yFR-vq-wtg"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="yFR-vq-wtg" firstAttribute="trailing" secondItem="U0B-ro-XxI" secondAttribute="trailing" id="62r-uG-UFK"/>
+                            <constraint firstItem="kWG-M1-Tmi" firstAttribute="leading" secondItem="yFR-vq-wtg" secondAttribute="leading" constant="159" id="E4r-mu-f3X"/>
+                            <constraint firstItem="5oY-iH-1Ow" firstAttribute="top" secondItem="kWG-M1-Tmi" secondAttribute="bottom" id="Rhg-g2-lHG"/>
+                            <constraint firstItem="STU-QW-0z7" firstAttribute="top" secondItem="U0B-ro-XxI" secondAttribute="bottom" id="TQL-ZB-CoW"/>
+                            <constraint firstItem="kWG-M1-Tmi" firstAttribute="centerX" secondItem="U0B-ro-XxI" secondAttribute="centerX" id="Tvi-Bf-kA2"/>
+                            <constraint firstItem="kWG-M1-Tmi" firstAttribute="centerX" secondItem="ZLi-Du-3FZ" secondAttribute="centerX" id="ZCM-Wq-HFx"/>
+                            <constraint firstItem="U0B-ro-XxI" firstAttribute="top" secondItem="yFR-vq-wtg" secondAttribute="top" id="b4l-Vi-NW6"/>
+                            <constraint firstItem="kWG-M1-Tmi" firstAttribute="top" secondItem="ZLi-Du-3FZ" secondAttribute="bottom" id="b8h-EQ-wzc"/>
+                            <constraint firstItem="ZLi-Du-3FZ" firstAttribute="top" secondItem="STU-QW-0z7" secondAttribute="bottom" id="bdM-Nv-iH8"/>
+                            <constraint firstItem="kWG-M1-Tmi" firstAttribute="centerX" secondItem="STU-QW-0z7" secondAttribute="centerX" id="eh2-uY-jmy"/>
+                            <constraint firstItem="U0B-ro-XxI" firstAttribute="leading" secondItem="yFR-vq-wtg" secondAttribute="leading" id="gyu-NL-xxr"/>
+                            <constraint firstItem="kWG-M1-Tmi" firstAttribute="centerX" secondItem="5oY-iH-1Ow" secondAttribute="centerX" id="qLS-8S-vUv"/>
+                            <constraint firstItem="yFR-vq-wtg" firstAttribute="bottom" secondItem="5oY-iH-1Ow" secondAttribute="bottom" id="wZX-yU-bM5"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="glamArView" destination="U0B-ro-XxI" id="zVh-e0-q3C"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="c1f-l2-3EB" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="139.69465648854961" y="3.5211267605633805"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
