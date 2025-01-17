@@ -23,8 +23,5 @@ let package = Package(
         .target(
             name: "GlamAR",
             dependencies: ["Alamofire"]),
-        .testTarget(
-            name: "GlamARTests",
-            dependencies: ["GlamAR"]),
     ]
 )
