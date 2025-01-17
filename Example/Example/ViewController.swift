@@ -29,10 +29,50 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                self.glamArView.startPreview(previewMode: .image("https://cdn.pixelbin.io/v2/glamar-fynd-835885/original/glamar-custom-data/models/makeup/2.jpg"), isBeauty: false)
-//        self.glamArView.startPreview(previewMode: .none)
-        //        self.glamArView.startPreview(previewMode: .camera)
         
+        glamArView.setCallback(self)
+    }
+}
+
+extension ViewController: GlamArViewCallback {
+    func onLoaded(mode: GlamAR.PreviewMode) {
+        print("onLoaded loaded")
+    }
+    
+    func onFaceAnalysisCompleted(payload: [String : Any]) {
+        print("onFaceAnalysisCompleted loaded")
+    }
+    
+    func onInitComplete() {
+        print("onInitComplete loaded")
+    }
+    
+    func onLoading() {
+        print("onLoading called")
+    }
+    
+    func onSkuApplied() {
+        print("onSkuApplied called")
+    }
+    
+    func onSkuFailed() {
+        print("onSkuFailed called")
+    }
+    
+    func onPhotoLoaded(payload: [String : Any]) {
+        print("onPhotoLoaded called")
+    }
+    
+    func onLoaded() {
+        print("onLoaded called")
+    }
+    
+    func onOpened() {
+        print("onOpened called")
+    }
+    
+    func onError(message: String) {
+        print("onError called")
     }
 }
 

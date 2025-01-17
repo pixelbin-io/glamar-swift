@@ -10,18 +10,18 @@ import Alamofire
 
 public class GlamArApi {
     let accessKey: String
-    let development: Bool
+    let debug: Bool
     private let session: Session
     
-    public init(accessKey: String, development: Bool) {
+    public init(accessKey: String, debug: Bool) {
         self.accessKey = accessKey
-        self.development = development
+        self.debug = debug
         let interceptor = RequestSigningAdapter(signingKey: "1234567")
         self.session = Session(interceptor: interceptor)
     }
     
     private var baseURL: String {
-        return self.development ? "https://api.pixelbinz0.de" : "https://api.pixelbin.io"
+        return self.debug ? "https://api.pixelbinz0.de" : "https://api.pixelbin.io"
     }
     
     public func fetchSkuList(pageNo: Int, pageSize: Int, completion: @escaping (Result<SkuListResponse, Error>) -> Void) {
