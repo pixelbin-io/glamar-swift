@@ -93,82 +93,138 @@ Now you're ready to use GlamAR in your project!
 
 ## Initialization
 
-### Initialize SDK in AppDelegate
-
-Initialize the SDK in your `AppDelegate` to ensure it's set up when your app starts. By default, it will be pointing to development; set `development` to `false` for production.
+To use GlamAR in your iOS application, you need to initialize it with your access key. The initialization should be done when your app starts, typically in your `AppDelegate` or `SceneDelegate`.
 
 ```swift
 import GlamAR
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        GlamAr.initialize(accessKey: "YOUR_ACCESS_KEY", development: false)
-        return true
+// In your AppDelegate
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    // Initialize GlamAR with all available options
+    GlamAr.initialize(
+        accessKey: "YOUR_ACCESS_KEY",
+        debug: true,  // Use debug environment (true) or production (false)
+        previewMode: .none  // Optional: Set preview mode (.none, .camera, or .image("URL"))
+    )
+    return true
+}
+```
+
+### Configuration Options
+
+- `accessKey`: Your unique access key for the GlamAR service (Required)
+- `debug`: Boolean flag to switch between debug and production environments
+  - `true`: Uses debug/staging environment (default)
+  - `false`: Uses production environment
+- `previewMode`: Sets the preview mode for AR visualization (Optional)
+  - `.none`: Default mode
+  - `.camera`: Camera preview mode
+  - `.image("URL")`: Image preview mode with specified URL
+
+### Getting GlamAR Instance
+
+After initialization, you can get the GlamAR instance using:
+
+```swift
+do {
+    let glamAr = try GlamAr.getInstance()
+    // Use glamAr instance
+} catch GlamArError.notInitialized {
+    print("GlamAR not initialized")
+}
+```
+
+## API Reference
+
+### GlamArApi
+
+The `GlamArApi` class provides methods to interact with the GlamAR backend services.
+
+```swift
+// Initialize the API
+let api = GlamArApi(accessKey: "your_access_key", debug: true)
+
+// Fetch SKU List
+api.fetchSkuList(pageNo: 1, pageSize: 10) { result in
+    switch result {
+    case .success(let response):
+        // Handle SKU list response
+        print("Total items: \(response.page.itemTotal)")
+        print("Items: \(response.items)")
+    case .failure(let error):
+        print("Error: \(error)")
     }
+}
+
+// Fetch Single SKU
+api.fetchSku(id: "sku_id") { result in
+    switch result {
+    case .success(let item):
+        // Handle single SKU response
+        print("SKU: \(item)")
+    case .failure(let error):
+        print("Error: \(error)")
+    }
+}
+```
+
+### Data Models
+
+#### SkuListResponse
+```swift
+public struct SkuListResponse {
+    public let page: Page
+    public let items: [Item]
+}
+```
+
+#### Page
+```swift
+public struct Page {
+    public let type: String
+    public let size: Int
+    public let current: Int
+    public let hasNext: Bool
+    public let itemTotal: Int
+}
+```
+
+#### Item
+```swift
+public struct Item {
+    public let id: String
+    public let orgId: Int
+    public let category: String
+    public let subCategory: String
+    public let productName: String?
+    public let productImage: String?
+    public let vendor: String?
+    public let isActive: Bool?
 }
 ```
 
 ## GlamArView
 
-### Setup
-
-To use `GlamArView`, add it to your view hierarchy:
+The `GlamArView` is the main component for displaying AR content:
 
 ```swift
-import GlamAR
+// Create a GlamArView
+let glamArView = GlamArView(frame: view.bounds)
+view.addSubview(glamArView)
 
-class ViewController: UIViewController {
-    @IBOutlet weak var glamArView: GlamArView!
+// Start preview with specific mode
+glamArView.startPreview(previewMode: .camera) // or .none or .image("URL")
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Setup GlamArView
-    }
-}
+// The view will automatically handle camera permissions when needed
 ```
 
-### Starting Preview
+### Preview Modes
 
-Start the preview in various modes using `startPreview`:
+GlamArView supports different preview modes:
 
-```swift
-glamArView.startPreview(previewMode: .none)
-glamArView.startPreview(previewMode: .camera)
-glamArView.startPreview(previewMode: .image("IMAGE_URL"), isBeauty: false)
-```
-
-### Applying SKUs
-
-Apply a SKU to the `GlamArView`:
-
-```swift
-glamArView.applySku(skuId: "SKU_ID", category: "CATEGORY")
-```
-
-### Clearing View
-
-Clear the `GlamArView`:
-
-```swift
-glamArView.clear()
-```
-
-### Taking Snapshot
-
-Take a snapshot of the current view:
-
-```swift
-glamArView.snapshot()
-```
-
-### Toggling Original/AR View
-
-Toggle between the original and AR-applied view:
-
-```swift
-glamArView.toggle(showOriginal: showingOriginal)
-```
+- `.none`: Default mode without any specific preview
+- `.camera`: Uses device camera for AR preview
+- `.image(String)`: Uses a specific image URL for preview
 
 ## GlamAr Instance API
 

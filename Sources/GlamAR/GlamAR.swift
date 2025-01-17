@@ -11,22 +11,22 @@ import UIKit
 public class GlamAr {
     
     let accessKey: String
-    let development: Bool
+    let debug: Bool
     public let api: GlamArApi
     
     private static var instance: GlamAr?
     
-    private init(accessKey: String, development: Bool = true, previewMode: PreviewMode) {
+    private init(accessKey: String, debug: Bool = true, previewMode: PreviewMode) {
         self.accessKey = accessKey
-        self.development = development
-        self.api = GlamArApi(accessKey: accessKey, development: development)
+        self.debug = debug
+        self.api = GlamArApi(accessKey: accessKey, debug: debug)
     }
     
-    public static func initialize(accessKey: String, development: Bool = true, previewMode: PreviewMode = .none) {
+    public static func initialize(accessKey: String, debug: Bool = true, previewMode: PreviewMode = .none) {
         if instance == nil {
-            instance = GlamAr(accessKey: accessKey, development: development, previewMode: previewMode)
+            instance = GlamAr(accessKey: accessKey, debug: debug, previewMode: previewMode)
         }
-        GlamArWebViewManager.shared.prepareWebView(development: development, previewMode: previewMode)
+        GlamArWebViewManager.shared.prepareWebView(debug: debug, previewMode: previewMode)
     }
     
     public static func getInstance() throws -> GlamAr {

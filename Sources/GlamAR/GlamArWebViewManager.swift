@@ -21,7 +21,7 @@ public class GlamArWebViewManager: NSObject {
     public var previewMode: PreviewMode = .none
     public weak var defaultCallback: GlamArViewCallback?
     
-    func prepareWebView(development: Bool = true, previewMode: PreviewMode = .none) {
+    func prepareWebView(debug: Bool = true, previewMode: PreviewMode = .none) {
         
         print("prepare webview")
         
@@ -40,8 +40,21 @@ public class GlamArWebViewManager: NSObject {
         webView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         webView?.navigationDelegate = self
         webView?.uiDelegate = self
+        
+        // Disable zoom
+        webView?.scrollView.delegate = self
+        webView?.scrollView.bounces = false
+        webView?.scrollView.bouncesZoom = false
+        
+        // Inject meta viewport tag to prevent zooming
+        let script = WKUserScript(
+            source: "var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);",
+            injectionTime: .atDocumentEnd,
+            forMainFrameOnly: true
+        )
+        config.userContentController.addUserScript(script)
                 
-        let glamArHostURL = development ? stagingUrl : prodUrl
+        let glamArHostURL = debug ? stagingUrl : prodUrl
         
         if let url = URL(string: glamArHostURL) {
             print("web url \(glamArHostURL)")
@@ -154,5 +167,15 @@ extension GlamArWebViewManager: WKNavigationDelegate, WKUIDelegate {
     public func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
         
         return origin.host == "www.glamarz0.de" ? .grant : .deny
+    }
+}
+
+extension GlamArWebViewManager: UIScrollViewDelegate {
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return nil // This disables zooming
+    }
+    
+    public func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        scrollView.pinchGestureRecognizer?.isEnabled = false
     }
 }

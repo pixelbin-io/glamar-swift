@@ -21,7 +21,7 @@ public class GlamArView: UIView {
         do {
             let glamAr = try GlamAr.getInstance()
             if (GlamArWebViewManager.shared.getPreparedWebView() == nil) {
-                GlamArWebViewManager.shared.prepareWebView(development: glamAr.development)
+                GlamArWebViewManager.shared.prepareWebView(debug: glamAr.debug)
             }
             
             
