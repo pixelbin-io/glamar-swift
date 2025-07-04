@@ -10,33 +10,62 @@ import WebKit
 
 public class GlamArWebViewManager: NSObject {
     
-    static let shared = GlamArWebViewManager();
+    public static let shared = GlamArWebViewManager();
     
     private override init() {}
     
-    private let prodUrl = "https://glamarz0.de/sdk/"
+    private let prodUrl = "https://glamar.io/sdk/"
     private let stagingUrl = "https://glamarz0.de/sdk/"
     
     private var webView: WKWebView?
-    public var previewMode: PreviewMode = .none
-    public weak var defaultCallback: GlamArViewCallback?
+    private var overrides: GlamAROverrides?
+    private var applicationId: String?
+    var isWebViewLoaded: Bool = false
     
-    func prepareWebView(debug: Bool = true, previewMode: PreviewMode = .none) {
+    func prepareWebView(debug: Bool = false,
+                        bundleIdentifier: String,
+                        overrides: GlamAROverrides? = nil,
+                        providedWebView: WKWebView? = nil) {
         
         print("prepare webview")
         
         clearPreparedWebView()
-        self.previewMode = previewMode
         
-        let prefs = WKWebpagePreferences()
-        prefs.allowsContentJavaScript = true
-        let config = WKWebViewConfiguration()
-        config.defaultWebpagePreferences = prefs
-        config.allowsInlineMediaPlayback = true
-        config.userContentController.add(self, name: "onLog")
-        config.mediaTypesRequiringUserActionForPlayback = []
+        self.overrides = overrides
+        self.applicationId = bundleIdentifier
         
-        webView = WKWebView(frame: CGRect(x: -1000, y: -1000, width: 1, height: 1), configuration: config)
+        
+        
+        // Inject meta viewport tag to prevent zooming
+        let script = WKUserScript(
+            source: "var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);",
+            injectionTime: .atDocumentEnd,
+            forMainFrameOnly: true
+        )
+        
+        if(providedWebView != nil) {
+            
+            webView = providedWebView
+            let config = WKWebViewConfiguration()
+            webView?.configuration.defaultWebpagePreferences.allowsContentJavaScript = true
+            webView?.configuration.allowsInlineMediaPlayback = true
+            webView?.configuration.userContentController.add(self, name: "onLog")
+            webView?.configuration.mediaTypesRequiringUserActionForPlayback = []
+            webView?.configuration.userContentController.addUserScript(script)
+        } else {
+            
+            let prefs = WKWebpagePreferences()
+            prefs.allowsContentJavaScript = true
+            let config = WKWebViewConfiguration()
+            config.defaultWebpagePreferences = prefs
+            config.allowsInlineMediaPlayback = true
+            config.userContentController.add(self, name: "onLog")
+            config.mediaTypesRequiringUserActionForPlayback = []
+            
+            webView = WKWebView(frame: CGRect(x: -1000, y: -1000, width: 1, height: 1), configuration: config)
+            config.userContentController.addUserScript(script)
+        }
+        
         webView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         webView?.navigationDelegate = self
         webView?.uiDelegate = self
@@ -46,14 +75,7 @@ public class GlamArWebViewManager: NSObject {
         webView?.scrollView.bounces = false
         webView?.scrollView.bouncesZoom = false
         
-        // Inject meta viewport tag to prevent zooming
-        let script = WKUserScript(
-            source: "var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);",
-            injectionTime: .atDocumentEnd,
-            forMainFrameOnly: true
-        )
-        config.userContentController.addUserScript(script)
-                
+        
         let glamArHostURL = debug ? stagingUrl : prodUrl
         
         if let url = URL(string: glamArHostURL) {
@@ -62,8 +84,8 @@ public class GlamArWebViewManager: NSObject {
             print("webview initiated \(String(describing: webView!.url))")
         }
     }
-        
-    func getPreparedWebView() -> WKWebView? {
+    
+    public func getPreparedWebView() -> WKWebView? {
         return webView
     }
     
@@ -71,11 +93,8 @@ public class GlamArWebViewManager: NSObject {
         webView?.evaluateJavaScript("document.body.innerHTML = ''", completionHandler: nil)
         webView?.removeFromSuperview()
         webView = nil
+        GlamArEventManager.shared.clearAllListeners()
         HTTPCookieStorage.shared.cookies?.forEach { HTTPCookieStorage.shared.deleteCookie($0) }
-    }
-    
-    func setGlamArCallback(callback: GlamArViewCallback) {
-        self.defaultCallback = callback
     }
     
     func evaluateJavaScript(_ script: String) {
@@ -91,68 +110,134 @@ public class GlamArWebViewManager: NSObject {
     
     public func initPreview() {
         print("inti preview")
+        
+        guard webView != nil else {
+            print("GlamArWebViewManager: WebView is nil")
+            return
+        }
+        
         do {
             let accessKey = try GlamAr.getInstance().accessKey
             
-            let script: String
-            switch previewMode {
-            case .none:
-                script = "window.parent.postMessage({ type: 'initialize', payload: {mode:'private', platform: 'ios', apiKey:'\(accessKey)', disableCrossIcon: true, disablePrevIcon: true} }, '*');"
-            case .image(let imageUrl):
-                script = "window.parent.postMessage({ type: 'initialize', payload: {mode :'private', platform: 'ios', apiKey:'\(accessKey)', disableCrossIcon: true, disablePrevIcon: true, openImageOnInit : '\(imageUrl)'} }, '*');"
-            case .camera:
-                script = "window.parent.postMessage({ type: 'initialize', payload: {mode :'private', platform: 'ios', apiKey:'\(accessKey)', disableCrossIcon: true, disablePrevIcon: true, openLiveOnInit : true} }, '*');"
-            case .faceAnalysis:
-                script = "window.parent.postMessage({ type: 'initialize', payload: { mode: 'private', platform: 'ios', apiKey: '\(accessKey)', category: 'faceanalysis', disableCrossIcon: true, disablePrevIcon: true, openLiveOnInit: true } }, '*');"
+            if(overrides == nil) {
+                let script = """
+                            window.parent.postMessage({
+                                type: 'initialize',
+                                payload: {
+                                    platform: 'ios',
+                                    apiKey: '\(accessKey)'
+                                }
+                            }, '*');
+                            """
+                            evaluateJavaScript(script)
+                            return
             }
-            evaluateJavaScript(script)
+            
+            let platform = "ios";
+            
+            var payload: [String: Any] = [
+                "apiKey": accessKey,
+                "platform": platform,
+                "parentDomain": applicationId ?? ""
+            ]
+            
+            if let category = overrides?.category {
+                payload["category"] = category
+            }
+            
+            if let config = overrides?.configuration {
+                var configMap: [String: Any] = [:]
+                
+                if let global = config.global {
+                    var globalMap: [String: Any] = [:]
+                    if let openLive = global.openLiveOnInit { globalMap["openLiveOnInit"] = openLive }
+                    if let disableClose = global.disableClose { globalMap["disableClose"] = disableClose }
+                    if let disableBack = global.disableBack { globalMap["disableBack"] = disableBack }
+                    if !globalMap.isEmpty { configMap["global"] = globalMap }
+                }
+                
+                if let skin = config.skinAnalysis {
+                    var skinMap: [String: Any] = [:]
+                    if let version = skin.version { skinMap["version"] = version }
+                    if let filter = skin.defaultFilter { skinMap["defaultFilter"] = filter }
+                    if let start = skin.startScreen { skinMap["startScreen"] = start }
+                    if !skinMap.isEmpty { configMap["skinAnalysis"] = skinMap }
+                }
+                
+                if let ui = config.ui {
+                    var uiMap: [String: Any] = [:]
+                    
+                    if let loader = ui.loader {
+                        var loaderMap: [String: Any] = [:]
+                        if let disable = loader.disable { loaderMap["disable"] = disable }
+                        if let jsonData = loader.jsonData { loaderMap["jsonData"] = jsonData }
+                        if let backgroundColor = loader.backgroundColor { loaderMap["backgroundColor"] = backgroundColor }
+                        if !loaderMap.isEmpty { uiMap["loader"] = loaderMap }
+                    }
+                    
+                    if let watermark = ui.watermark {
+                        var watermarkMap: [String: Any] = [:]
+                        if let text = watermark.text { watermarkMap["text"] = text }
+                        if let fontColor = watermark.fontColor { watermarkMap["fontColor"] = fontColor }
+                        if let logo = watermark.logo { watermarkMap["logo"] = logo }
+                        if !watermarkMap.isEmpty { uiMap["watermark"] = watermarkMap }
+                    }
+                    
+                    if let ar = ui.ar {
+                        var arMap: [String: Any] = [:]
+                        if let disable3DUI = ar.disable3DUI { arMap["disable3DUI"] = disable3DUI }
+                        if !arMap.isEmpty { uiMap["ar"] = arMap }
+                    }
+                    
+                    if !uiMap.isEmpty {
+                        configMap["ui"] = uiMap
+                    }
+                }
+                
+                if !configMap.isEmpty {
+                    payload["configuration"] = configMap
+                }
+                
+                // Convert payload to JSON
+                guard let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: []),
+                      let jsonString = String(data: jsonData, encoding: .utf8) else {
+                    print("GlamArWebViewManager: Failed to serialize payload")
+                    return
+                }
+                
+                print("GlamArWebViewManager jsonPayload: \(jsonString)")
+                
+                let script = """
+                        window.parent.postMessage({
+                            type: 'initialize',
+                            payload: \(jsonString)
+                        }, '*');
+                        """
+                evaluateJavaScript(script)
+            }
         } catch {
-            defaultCallback?.onError(message: "Failed to initialize: \(error.localizedDescription)")
+            //defaultCallback?.onError(message: "Failed to initialize: \(error.localizedDescription)")
         }
     }
 }
 
 extension GlamArWebViewManager: WKScriptMessageHandler {
+    
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        
         guard let args = message.body as? String else { return }
+        print("web message: \(args)")
+        
         do {
-            let argsData = Data(args.utf8)
-            if let argsJson = try JSONSerialization.jsonObject(with: argsData, options: []) as? [String: Any],
-               let type = argsJson["type"] as? String {
-                handleJavaScriptMessage(type: type, argsJson: argsJson)
+            if let data = args.data(using: .utf8),
+               let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let type = json["type"] as? String {
+                
+                print("tag: WebView message Event received: \(type)")
+                GlamArEventManager.shared.dispatchEvent(event: type, payload: json)
             }
         } catch {
-            print("Error processing JavaScript message: \(error)")
-            defaultCallback?.onError(message: "Error processing JavaScript message: \(error.localizedDescription)")
-        }
-    }
-
-    private func handleJavaScriptMessage(type: String, argsJson: [String: Any]) {
-        print("js type \(type) message \(argsJson)")
-        switch type {
-        case "init-complete":
-            defaultCallback?.onInitComplete()
-        case "loading":
-            defaultCallback?.onLoading()
-        case "sku-applied":
-            defaultCallback?.onSkuApplied()
-        case "sku-failed":
-            defaultCallback?.onSkuFailed()
-        case "photo-loaded":
-            if let payload = argsJson["payload"] as? [String: Any] {
-                defaultCallback?.onPhotoLoaded(payload: payload)
-            }
-        case "loaded":
-            defaultCallback?.onLoaded(mode: previewMode)
-        case "error":
-            let errorMessage = argsJson["message"] as? String ?? "Unknown error occurred"
-            defaultCallback?.onError(message: errorMessage)
-        case "face-analysis":
-            if let payload = argsJson["payload"] as? [String: Any] {
-                defaultCallback?.onFaceAnalysisCompleted(payload: payload)
-            }
-        default:
-            break
+            print("tag: WebView message: Error processing JS message: \(error)")
         }
     }
 }
@@ -161,6 +246,7 @@ extension GlamArWebViewManager: WKNavigationDelegate, WKUIDelegate {
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("WebView finished loading")
         initPreview()
+        isWebViewLoaded = true
     }
     
     @available(iOS 15.0, *)

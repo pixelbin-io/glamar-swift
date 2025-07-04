@@ -81,3 +81,95 @@ public struct Attribute: Decodable {
     public let colors: [String]
     public let effectAssets: [String]
 }
+
+public struct GlamAROverrides {
+    public var category: String?
+    public var configuration: Configuration?
+    public var meta: [String: Any]?
+    
+    public init(category: String? = nil, configuration: Configuration? = nil, meta: [String: Any]? = nil) {
+        self.category = category
+        self.configuration = configuration
+        self.meta = meta
+    }
+}
+
+public struct Configuration {
+    public var global: GlobalConfig?
+    public var skinAnalysis: SkinAnalysisConfig?
+    public var ui: UIConfig?
+
+    public init(global: GlobalConfig? = nil, skinAnalysis: SkinAnalysisConfig? = nil, ui: UIConfig? = nil) {
+        self.global = global
+        self.skinAnalysis = skinAnalysis
+        self.ui = ui
+    }
+}
+
+public struct GlobalConfig {
+    public var openLiveOnInit: Bool?
+    public var disableClose: Bool?
+    public var disableBack: Bool?
+
+    public init(openLiveOnInit: Bool? = nil, disableClose: Bool? = nil, disableBack: Bool? = nil) {
+        self.openLiveOnInit = openLiveOnInit
+        self.disableClose = disableClose
+        self.disableBack = disableBack
+    }
+}
+
+public struct SkinAnalysisConfig {
+    public var version: String?
+    public var defaultFilter: Bool?
+    public var startScreen: Bool?
+
+    public init(version: String? = nil, defaultFilter: Bool? = nil, startScreen: Bool? = nil) {
+        self.version = version
+        self.defaultFilter = defaultFilter
+        self.startScreen = startScreen
+    }
+}
+
+public struct UIConfig {
+    public var loader: LoaderConfig?
+    public var watermark: WatermarkConfig?
+    public var ar: ARConfig?
+
+    public init(loader: LoaderConfig? = nil, watermark: WatermarkConfig? = nil, ar: ARConfig? = nil) {
+        self.loader = loader
+        self.watermark = watermark
+        self.ar = ar
+    }
+}
+
+public struct LoaderConfig {
+    public var disable: Bool?
+    public var jsonData: String?
+    public var backgroundColor: String?
+
+    public init(disable: Bool? = nil, jsonData: String? = nil, backgroundColor: String? = nil) {
+        self.disable = disable
+        self.jsonData = jsonData
+        self.backgroundColor = backgroundColor
+    }
+}
+
+public struct WatermarkConfig {
+    public var text: String?
+    public var fontColor: String?
+    public var logo: String?
+
+    public init(text: String? = nil, fontColor: String? = nil, logo: String? = nil) {
+        self.text = text
+        self.fontColor = fontColor
+        self.logo = logo
+    }
+}
+
+public struct ARConfig {
+    public var disable3DUI: Bool?
+
+    public init(disable3DUI: Bool? = nil) {
+        self.disable3DUI = disable3DUI
+    }
+}

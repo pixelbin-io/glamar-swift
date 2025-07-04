@@ -1,0 +1,24 @@
+{
+  "originHash" : "ff6cae977eb1fa091a9b0e761c575f57f8fa4e3baa9d60977cbab9a386caf46d",
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
+        "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "glamar-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pixelbin-io/glamar-swift.git",
+      "state" : {
+        "revision" : "39454c6a203c51e930cdf6274d99de3acd1137f4",
+        "version" : "1.0.1"
+      }
+    }
+  ],
+  "version" : 3
+}

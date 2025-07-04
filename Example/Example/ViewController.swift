@@ -7,72 +7,53 @@
 
 import UIKit
 import GlamAR
+import WebKit
 
 class ViewController: UIViewController {
     private var showingOriginal = false
     
-    @IBOutlet weak var glamArView: GlamArView!
+    @IBOutlet weak var glamARWebView: WKWebView!
     
     @IBAction func onApplyClick(_ sender: Any) {
-        self.glamArView.applySku(skuId: "666b311f-1b34-4082-99d1-c525451b44a1", category: "beauty")
+        GlamAr.applySku("48062362-cd9d-4a63-b755-3a9ed639f023")
     }
     @IBAction func onClearClick(_ sender: Any) {
-        self.glamArView.clear()
+        
     }
     @IBAction func onToggleClick(_ sender: Any) {
-        showingOriginal = !showingOriginal
-        self.glamArView.toggle(showOriginal: showingOriginal)
+        
     }
     @IBAction func onExportClick(_ sender: Any) {
-        self.glamArView.snapshot()
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        glamArView.setCallback(self)
-    }
-}
-
-extension ViewController: GlamArViewCallback {
-    func onLoaded(mode: GlamAR.PreviewMode) {
-        print("onLoaded loaded")
-    }
-    
-    func onFaceAnalysisCompleted(payload: [String : Any]) {
-        print("onFaceAnalysisCompleted loaded")
-    }
-    
-    func onInitComplete() {
-        print("onInitComplete loaded")
-    }
-    
-    func onLoading() {
-        print("onLoading called")
-    }
-    
-    func onSkuApplied() {
-        print("onSkuApplied called")
-    }
-    
-    func onSkuFailed() {
-        print("onSkuFailed called")
-    }
-    
-    func onPhotoLoaded(payload: [String : Any]) {
-        print("onPhotoLoaded called")
-    }
-    
-    func onLoaded() {
-        print("onLoaded called")
-    }
-    
-    func onOpened() {
-        print("onOpened called")
-    }
-    
-    func onError(message: String) {
-        print("onError called")
+        if let webview = GlamArWebViewManager.shared.getPreparedWebView() {
+            
+            glamARWebView.addSubview(webview)
+            
+            webview.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                webview.topAnchor.constraint(equalTo: glamARWebView.topAnchor),
+                webview.bottomAnchor.constraint(equalTo: glamARWebView.bottomAnchor),
+                webview.leadingAnchor.constraint(equalTo: glamARWebView.leadingAnchor),
+                webview.trailingAnchor.constraint(equalTo: glamARWebView.trailingAnchor)
+            ])
+        }
+        
+        GlamAr.addEventListener(event: "sku-applied") { (callbackValue) in
+            print("sku-applied: \(callbackValue ?? "")")
+        }
+        
+        GlamAr.addEventListener(event: "sku-failed") { (callbackValue) in
+            print("sku-failef: \(callbackValue ?? "")")
+        }
+        
+        GlamAr.addEventListener(event: "init-complete") { (callbackValue) in
+            print("init-complete: \(callbackValue ?? "")")
+        }
     }
 }
 

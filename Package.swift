@@ -23,5 +23,11 @@ let package = Package(
         .target(
             name: "GlamAR",
             dependencies: ["Alamofire"]),
+        // 👇 Add this target for your example app
+                .target(
+                    name: "ExampleApp",
+                    dependencies: ["GlamAR"],
+                    path: "example"
+                )
     ]
 )
