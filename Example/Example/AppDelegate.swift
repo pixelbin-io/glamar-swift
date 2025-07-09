@@ -13,7 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         print("application did finish loaing")
-        GlamAr.initialize(accessKey: "ff4146c9-386a-463d-9b7d-4191bfa35c7f", debug: true, previewMode: PreviewMode.image("https://cdn.pixelbin.io/v2/glamar-fynd-835885/original/glamar-custom-data/models/makeup/2.jpg"))
+        let overrides = GlamAROverrides(
+            category: "sunglasses",
+            configuration: Configuration(global: GlobalConfig(disableClose: true, disableBack: false))
+        )
+        GlamAr.initialize(accessKey: "c1c91c71-b644-4df3-b660-7352ea13b80b", debug: false, bundleIdentifier: Bundle.main.bundleIdentifier ?? "", overrides: overrides)
         return true
     }
 

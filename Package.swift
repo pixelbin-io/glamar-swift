@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "GlamAR",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v14),
     ],
@@ -23,5 +24,11 @@ let package = Package(
         .target(
             name: "GlamAR",
             dependencies: ["Alamofire"]),
+        // 👇 Add this target for your example app
+                .target(
+                    name: "ExampleApp",
+                    dependencies: ["GlamAR"],
+                    path: "example"
+                )
     ]
 )

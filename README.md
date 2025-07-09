@@ -2,7 +2,19 @@
 
 ## Overview
 
-The GlamAR SDK provides tools to integrate augmented reality (AR) features into your iOS application. This document covers the installation, initialization, and usage of the SDK, including details about `GlamArView` API, and `GlamAr` instance API.
+GlamAR is a powerful Augmented Reality SDK for Android that enables virtual try-on experiences for makeup, jewelry, and other beauty products. The SDK provides an easy-to-integrate solution with real-time AR capabilities, face detection, and product visualization features.
+
+## Features
+
+- Real-time virtual makeup try-on
+- Multiple product category support
+- Camera and image-based preview modes
+- Real-time face tracking and analysis
+- Easy integration with Android applications
+- Snapshot functionality
+- High-performance WebView-based rendering
+- Original/Modified view comparison
+- Configurable parameters
 
 ## Installation
 
@@ -104,7 +116,9 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
     GlamAr.initialize(
         accessKey: "YOUR_ACCESS_KEY",
         debug: true,  // Use debug environment (true) or production (false)
-        previewMode: .none  // Optional: Set preview mode (.none, .camera, or .image("URL"))
+        bundleIdentifier: String = Bundle.main.bundleIdentifier ?? "", // Used for parent domain reference
+        overrides: GlamAROverrides? = nil, // Optional override configuration
+        webView: WKWebView? = nil) // Optional: Pass a pre-configured WKWebView
     )
     return true
 }
@@ -116,10 +130,8 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 - `debug`: Boolean flag to switch between debug and production environments
   - `true`: Uses debug/staging environment (default)
   - `false`: Uses production environment
-- `previewMode`: Sets the preview mode for AR visualization (Optional)
-  - `.none`: Default mode
-  - `.camera`: Camera preview mode
-  - `.image("URL")`: Image preview mode with specified URL
+- `bundleIdentifier`: Parent domain reference
+- `overrides`: Category configurations 
 
 ### Getting GlamAR Instance
 
@@ -134,128 +146,14 @@ do {
 }
 ```
 
-## API Reference
+## GlamArWebViewManager
 
-### GlamArApi
-
-The `GlamArApi` class provides methods to interact with the GlamAR backend services.
+The `GlamArWebViewManager` is the main component for displaying AR content:
 
 ```swift
-// Initialize the API
-let api = GlamArApi(accessKey: "your_access_key", debug: true)
-
-// Fetch SKU List
-api.fetchSkuList(pageNo: 1, pageSize: 10) { result in
-    switch result {
-    case .success(let response):
-        // Handle SKU list response
-        print("Total items: \(response.page.itemTotal)")
-        print("Items: \(response.items)")
-    case .failure(let error):
-        print("Error: \(error)")
-    }
-}
-
-// Fetch Single SKU
-api.fetchSku(id: "sku_id") { result in
-    switch result {
-    case .success(let item):
-        // Handle single SKU response
-        print("SKU: \(item)")
-    case .failure(let error):
-        print("Error: \(error)")
-    }
-}
-```
-
-### Data Models
-
-#### SkuListResponse
-```swift
-public struct SkuListResponse {
-    public let page: Page
-    public let items: [Item]
-}
-```
-
-#### Page
-```swift
-public struct Page {
-    public let type: String
-    public let size: Int
-    public let current: Int
-    public let hasNext: Bool
-    public let itemTotal: Int
-}
-```
-
-#### Item
-```swift
-public struct Item {
-    public let id: String
-    public let orgId: Int
-    public let category: String
-    public let subCategory: String
-    public let productName: String?
-    public let productImage: String?
-    public let vendor: String?
-    public let isActive: Bool?
-}
-```
-
-## GlamArView
-
-The `GlamArView` is the main component for displaying AR content:
-
-```swift
-// Create a GlamArView
-let glamArView = GlamArView(frame: view.bounds)
-view.addSubview(glamArView)
-
-// Start preview with specific mode
-glamArView.startPreview(previewMode: .camera) // or .none or .image("URL")
-
-// The view will automatically handle camera permissions when needed
-```
-
-### Preview Modes
-
-GlamArView supports different preview modes:
-
-- `.none`: Default mode without any specific preview
-- `.camera`: Uses device camera for AR preview
-- `.image(String)`: Uses a specific image URL for preview
-
-## GlamAr Instance API
-
-### Fetch SKU List
-
-Fetch a list of SKUs:
-
-```swift
-GlamAr.getInstance().api.fetchSkuList(pageNo: 1, pageSize: 100) { result in
-    switch result {
-    case .success(let skuListResponse):
-        // Handle success
-    case .failure(let error):
-        // Handle failure
-    }
-}
-```
-
-### Fetch Specific SKU
-
-Fetch details of a specific SKU:
-
-```swift
-GlamAr.getInstance().api.fetchSku(id: "SKU_ID") { result in
-    switch result {
-    case .success(let item):
-        // Handle success
-    case .failure(let error):
-        // Handle failure
-    }
-}
+// Create a webview
+let glamARWebView = GlamArWebViewManager.shared.getPreparedWebView()
+view.addSubview(glamARWebView)
 ```
 
 ## Example Usage
@@ -269,31 +167,47 @@ import GlamAR
 class ViewController: UIViewController {
     private var showingOriginal = false
 
-    @IBOutlet weak var glamArView: GlamArView!
+    @IBOutlet weak var glamARWebView: WKWebView!
 
     @IBAction func onApplyClick(_ sender: Any) {
-        self.glamArView.applySku(skuId: "666b311f-1b34-4082-99d1-c525451b44a1", category: "beauty")
+        GlamAr.applySku("666b311f-1b34-4082-99d1-c525451b44a1")
     }
 
     @IBAction func onClearClick(_ sender: Any) {
-        self.glamArView.clear()
-    }
-
-    @IBAction func onToggleClick(_ sender: Any) {
-        showingOriginal = !showingOriginal
-        self.glamArView.toggle(showOriginal: showingOriginal)
+        GlamAr.close()
     }
 
     @IBAction func onExportClick(_ sender: Any) {
-        self.glamArView.snapshot()
+        GlamAr.snapshot()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.glamArView.startPreview(previewMode: .none)
-        // Alternatively:
-        // self.glamArView.startPreview(previewMode: .camera)
-        // self.glamArView.startPreview(previewMode: .image("IMAGE_URL"), isBeauty: false)
+        
+        if let webview = GlamArWebViewManager.shared.getPreparedWebView() {
+            
+            glamARWebView.addSubview(webview)
+            
+            webview.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                webview.topAnchor.constraint(equalTo: glamARWebView.topAnchor),
+                webview.bottomAnchor.constraint(equalTo: glamARWebView.bottomAnchor),
+                webview.leadingAnchor.constraint(equalTo: glamARWebView.leadingAnchor),
+                webview.trailingAnchor.constraint(equalTo: glamARWebView.trailingAnchor)
+            ])
+        }
+        
+        GlamAr.addEventListener(event: "sku-applied") { (callbackValue) in
+            print("sku-applied: \(callbackValue ?? "")")
+        }
+        
+        GlamAr.addEventListener(event: "sku-failed") { (callbackValue) in
+            print("sku-failef: \(callbackValue ?? "")")
+        }
+        
+        GlamAr.addEventListener(event: "init-complete") { (callbackValue) in
+            print("init-complete: \(callbackValue ?? "")")
+        }
     }
 }
 ```
