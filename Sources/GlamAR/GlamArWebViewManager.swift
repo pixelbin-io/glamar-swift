@@ -14,8 +14,10 @@ public class GlamArWebViewManager: NSObject {
     
     private override init() {}
     
-    private let prodUrl = "https://glamar.io/sdk/"
-    private let stagingUrl = "https://glamarz0.de/sdk/"
+    private let prodUrl = "https://cdn.glamar.io/sdk"
+    private let stagingUrl = "https://cdn.glamarz0.de/sdk"
+    
+    private let apiurl = "https://api.pixelbin.io"
     
     private var webView: WKWebView?
     private var overrides: GlamAROverrides?
@@ -78,10 +80,58 @@ public class GlamArWebViewManager: NSObject {
         
         let glamArHostURL = debug ? stagingUrl : prodUrl
         
-        if let url = URL(string: glamArHostURL) {
-            print("web url \(glamArHostURL)")
-            webView?.load(URLRequest(url: url))
-            print("webview initiated \(String(describing: webView!.url))")
+        let sdkMetaVersion = (overrides?.meta as? [String: Any])?["sdkVersion"] as? String
+        var finalUrl = "\(glamArHostURL)/v1.0.0?"
+        
+        do {
+            let api = try GlamAr.getInstance().api
+            
+            api.getVersion { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let sdkVersion):
+                        print("GlamArWebViewManager", "Version API done (success: \(sdkVersion ?? "nil")). Proceeding to loadUrl.")
+                        
+                        if let version = sdkVersion, !version.isEmpty {
+                            finalUrl = "\(glamArHostURL)/v\(version)?"
+                        } else if let sdkMeta = sdkMetaVersion {
+                            finalUrl = "\(glamArHostURL)/v\(sdkMeta)?"
+                        }
+                        
+                        if let url = URL(string: finalUrl) {
+                            
+                            print("web url \(url)")
+                            self?.webView?.load(URLRequest(url: url))
+                            print("webview initiated \(String(describing: self?.webView!.url))")
+                        }
+                    case .failure(let error):
+                        print("GlamArWebViewManager", "Version API failed: \(error.localizedDescription). Using fallback.")
+                        
+                        if let sdkMeta = sdkMetaVersion {
+                            finalUrl = "\(glamArHostURL)/v\(sdkMeta)?"
+                        }
+                        
+                        if let url = URL(string: finalUrl) {
+                            
+                            print("web url \(url)")
+                            self?.webView?.load(URLRequest(url: url))
+                            print("webview initiated \(String(describing: self?.webView!.url))")
+                        }
+                    }
+                }
+            }
+        } catch {
+            print("GlamArWebViewManager", "GlamArApi init failed: \(error.localizedDescription). Using fallback.")
+            if let sdkMeta = sdkMetaVersion {
+                finalUrl = "\(glamArHostURL)/v\(sdkMeta)?"
+            }
+            
+            if let url = URL(string: finalUrl) {
+                
+                print("web url \(url)")
+                webView?.load(URLRequest(url: url))
+                print("webview initiated \(String(describing: webView!.url))")
+            }
         }
     }
     
@@ -129,8 +179,8 @@ public class GlamArWebViewManager: NSObject {
                                 }
                             }, '*');
                             """
-                            evaluateJavaScript(script)
-                            return
+                evaluateJavaScript(script)
+                return
             }
             
             let platform = "ios";
@@ -158,9 +208,7 @@ public class GlamArWebViewManager: NSObject {
                 
                 if let skin = config.skinAnalysis {
                     var skinMap: [String: Any] = [:]
-                    if let version = skin.version { skinMap["version"] = version }
-                    if let filter = skin.defaultFilter { skinMap["defaultFilter"] = filter }
-                    if let start = skin.startScreen { skinMap["startScreen"] = start }
+                    if let start = skin.appId { skinMap["appId"] = start }
                     if !skinMap.isEmpty { configMap["skinAnalysis"] = skinMap }
                 }
                 
@@ -197,6 +245,7 @@ public class GlamArWebViewManager: NSObject {
                 if !configMap.isEmpty {
                     payload["configuration"] = configMap
                 }
+            }
                 
                 // Convert payload to JSON
                 guard let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: []),
@@ -214,7 +263,6 @@ public class GlamArWebViewManager: NSObject {
                         }, '*');
                         """
                 evaluateJavaScript(script)
-            }
         } catch {
             //defaultCallback?.onError(message: "Failed to initialize: \(error.localizedDescription)")
         }

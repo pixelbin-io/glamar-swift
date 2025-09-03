@@ -14,8 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         print("application did finish loaing")
         let overrides = GlamAROverrides(
-            category: "sunglasses",
-            configuration: Configuration(global: GlobalConfig(disableClose: true, disableBack: false))
+            //category: "sunglasses",
+            meta: ["sdkVersion" : "2.0.0"]
+            //configuration: Configuration(global: GlobalConfig(disableClose: true, disableBack: false))
         )
         GlamAr.initialize(accessKey: "c1c91c71-b644-4df3-b660-7352ea13b80b", debug: false, bundleIdentifier: Bundle.main.bundleIdentifier ?? "", overrides: overrides)
         return true

@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var glamARWebView: WKWebView!
     
     @IBAction func onApplyClick(_ sender: Any) {
-        GlamAr.applySku("48062362-cd9d-4a63-b755-3a9ed639f023")
+        GlamAr.applyByCategory(category: "sunglasses")
     }
     
     @IBAction func onClearClick(_ sender: Any) {
@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onToggleClick(_ sender: Any) {
-        
+        GlamAr.skinAnalysis(options: "start")
     }
     
     @IBAction func onExportClick(_ sender: Any) {
@@ -56,6 +56,10 @@ class ViewController: UIViewController {
         
         GlamAr.addEventListener(event: "init-complete") { (callbackValue) in
             print("init-complete: \(callbackValue ?? "")")
+        }
+        
+        GlamAr.addEventListener(event: "loaded") { (callbackValue) in
+            print("loaded-callback: \(callbackValue ?? "")")
         }
     }
 }
