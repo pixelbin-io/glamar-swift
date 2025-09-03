@@ -70,11 +70,11 @@ public class GlamAr {
     }
     
     public static func applyByCategory(category: String) {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'applyByCategory' , payload: '${category}'  }, '*');")
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'applyByCategory' , payload: '\(category)'  }, '*');")
     }
     
-    public static func applyByMultipleConfigData(config: (Any?) -> Unit) {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'applyByMultipleConfigData' , payload: '${config}'  }, '*');")
+    public static func applyByMultipleConfigData(config: Any) {
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'applyByMultipleConfigData' , payload: '\(config)'  }, '*');")
     }
     
     public static func onAddedToCart(skuId: String) {
@@ -91,7 +91,7 @@ public class GlamAr {
     
     public static func open(mode: String? = nil, imgURL: String? = nil) {
         if(mode != nil) {
-            evaluateJavascript(script: "window.parent.postMessage({ type: 'openLivePreview' , payload: { mode:'${mode}', imgURL: '${imgURL}' } }, '*');")
+            evaluateJavascript(script: "window.parent.postMessage({ type: 'openLivePreview' , payload: { mode:'\(mode)', imgURL: '\(imgURL)' } }, '*');")
         } else {
             evaluateJavascript(script: "window.parent.postMessage({ type: 'openLivePreview' }, '*');")
         }
@@ -118,15 +118,15 @@ public class GlamAr {
     }
     
     public static func skinAnalysis(options: String) {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'skinAnalysis' , payload: { options: '${options}' }  }, '*');")
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'skinAnalysis' , payload: { options: '\(options)' }  }, '*');")
     }
     
     public static func eyePD(options: String) {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'eyePD' , payload: { options: '${options}' }  }, '*');")
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'eyePD' , payload: { options: '\(options)' }  }, '*');")
     }
     
     public static func openUI(name: String) {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'openUi' , payload: { name: '${name}' }  }, '*');")
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'openUi' , payload: { name: '\(name)' }  }, '*');")
     }
 }
 

@@ -64,6 +64,9 @@ public class GlamArWebViewManager: NSObject {
             config.userContentController.add(self, name: "onLog")
             config.mediaTypesRequiringUserActionForPlayback = []
             
+            // Required for camera & mic access via JS (getUserMedia)
+            config.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
+            
             webView = WKWebView(frame: CGRect(x: -1000, y: -1000, width: 1, height: 1), configuration: config)
             config.userContentController.addUserScript(script)
         }
@@ -98,12 +101,7 @@ public class GlamArWebViewManager: NSObject {
                             finalUrl = "\(glamArHostURL)/v\(sdkMeta)?"
                         }
                         
-                        if let url = URL(string: finalUrl) {
-                            
-                            print("web url \(url)")
-                            self?.webView?.load(URLRequest(url: url))
-                            print("webview initiated \(String(describing: self?.webView!.url))")
-                        }
+                        self?.loadWebView(url: finalUrl)
                     case .failure(let error):
                         print("GlamArWebViewManager", "Version API failed: \(error.localizedDescription). Using fallback.")
                         
@@ -111,12 +109,7 @@ public class GlamArWebViewManager: NSObject {
                             finalUrl = "\(glamArHostURL)/v\(sdkMeta)?"
                         }
                         
-                        if let url = URL(string: finalUrl) {
-                            
-                            print("web url \(url)")
-                            self?.webView?.load(URLRequest(url: url))
-                            print("webview initiated \(String(describing: self?.webView!.url))")
-                        }
+                        self?.loadWebView(url: finalUrl)
                     }
                 }
             }
@@ -126,17 +119,28 @@ public class GlamArWebViewManager: NSObject {
                 finalUrl = "\(glamArHostURL)/v\(sdkMeta)?"
             }
             
-            if let url = URL(string: finalUrl) {
+            loadWebView(url: finalUrl)
+        }
+    }
+    
+    private func loadWebView(url: String) {
+        
+        GlamArWebPermissionManager.instance.requestCameraPermission { [weak self] granted in
+            if let url = URL(string: url) {
                 
                 print("web url \(url)")
-                webView?.load(URLRequest(url: url))
-                print("webview initiated \(String(describing: webView!.url))")
+                self?.webView?.load(URLRequest(url: url))
+                print("webview initiated \(String(describing: self?.webView?.url))")
             }
         }
     }
     
     public func getPreparedWebView() -> WKWebView? {
         return webView
+    }
+    
+    func reloadWebView() {
+        webView?.reload()
     }
     
     func clearPreparedWebView() {
