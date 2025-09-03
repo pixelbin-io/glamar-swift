@@ -65,8 +65,9 @@ public class GlamArApi {
         
         let urlString = "\(baseURL)/service/private/misc/v3.0/sdk-settings/version"
         
+        let encodedKey = Data(accessKey.utf8).base64EncodedString()
         let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(accessKey)"
+            "Authorization": "Bearer \(encodedKey)"
         ]
         session.request(urlString, method: .get, headers: headers)
             .responseDecodable(of: VersionResponse.self) { response in
