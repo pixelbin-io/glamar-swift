@@ -199,51 +199,17 @@ public class GlamArWebViewManager: NSObject {
                 payload["category"] = category
             }
             
+            if let meta = overrides?.meta {
+                payload["meta"] = meta
+            }
+            
             if let config = overrides?.configuration {
                 var configMap: [String: Any] = [:]
-                
-                if let global = config.global {
-                    var globalMap: [String: Any] = [:]
-                    if let openLive = global.openLiveOnInit { globalMap["openLiveOnInit"] = openLive }
-                    if let disableClose = global.disableClose { globalMap["disableClose"] = disableClose }
-                    if let disableBack = global.disableBack { globalMap["disableBack"] = disableBack }
-                    if !globalMap.isEmpty { configMap["global"] = globalMap }
-                }
                 
                 if let skin = config.skinAnalysis {
                     var skinMap: [String: Any] = [:]
                     if let start = skin.appId { skinMap["appId"] = start }
                     if !skinMap.isEmpty { configMap["skinAnalysis"] = skinMap }
-                }
-                
-                if let ui = config.ui {
-                    var uiMap: [String: Any] = [:]
-                    
-                    if let loader = ui.loader {
-                        var loaderMap: [String: Any] = [:]
-                        if let disable = loader.disable { loaderMap["disable"] = disable }
-                        if let jsonData = loader.jsonData { loaderMap["jsonData"] = jsonData }
-                        if let backgroundColor = loader.backgroundColor { loaderMap["backgroundColor"] = backgroundColor }
-                        if !loaderMap.isEmpty { uiMap["loader"] = loaderMap }
-                    }
-                    
-                    if let watermark = ui.watermark {
-                        var watermarkMap: [String: Any] = [:]
-                        if let text = watermark.text { watermarkMap["text"] = text }
-                        if let fontColor = watermark.fontColor { watermarkMap["fontColor"] = fontColor }
-                        if let logo = watermark.logo { watermarkMap["logo"] = logo }
-                        if !watermarkMap.isEmpty { uiMap["watermark"] = watermarkMap }
-                    }
-                    
-                    if let ar = ui.ar {
-                        var arMap: [String: Any] = [:]
-                        if let disable3DUI = ar.disable3DUI { arMap["disable3DUI"] = disable3DUI }
-                        if !arMap.isEmpty { uiMap["ar"] = arMap }
-                    }
-                    
-                    if !uiMap.isEmpty {
-                        configMap["ui"] = uiMap
-                    }
                 }
                 
                 if !configMap.isEmpty {
@@ -304,7 +270,7 @@ extension GlamArWebViewManager: WKNavigationDelegate, WKUIDelegate {
     @available(iOS 15.0, *)
     public func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
         
-        return origin.host == "www.glamarz0.de" ? .grant : .deny
+        return (origin.host == "cdn.glamarz0.de" || origin.host == "cdn.glamar.io") ? .grant : .deny
     }
 }
 

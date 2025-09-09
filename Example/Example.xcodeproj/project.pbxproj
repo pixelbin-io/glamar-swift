@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,9 @@
 		6112C2412E680EC1007897F1 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 6112C2402E680EC1007897F1 /* GlamAR */; };
 		6112C2442E680FA0007897F1 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 6112C2432E680FA0007897F1 /* GlamAR */; };
 		612E3F4A2E684E8E000D0F13 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 612E3F492E684E8E000D0F13 /* GlamAR */; };
+		612E3F4D2E6EB8EE000D0F13 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 612E3F4C2E6EB8EE000D0F13 /* GlamAR */; };
+		612E3F502E6EB923000D0F13 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 612E3F4F2E6EB923000D0F13 /* GlamAR */; };
+		612E3F532E6FF5BA000D0F13 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 612E3F522E6FF5BA000D0F13 /* GlamAR */; };
 		619DD1942D27C40B003434B4 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DD1932D27C40B003434B4 /* FirstViewController.swift */; };
 		61A642382E1E4425002076AE /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 61A642372E1E4425002076AE /* GlamAR */; };
 /* End PBXBuildFile section */
@@ -37,6 +40,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				612E3F532E6FF5BA000D0F13 /* GlamAR in Frameworks */,
+				612E3F502E6EB923000D0F13 /* GlamAR in Frameworks */,
+				612E3F4D2E6EB8EE000D0F13 /* GlamAR in Frameworks */,
 				6112C2442E680FA0007897F1 /* GlamAR in Frameworks */,
 				6112C2412E680EC1007897F1 /* GlamAR in Frameworks */,
 				612E3F4A2E684E8E000D0F13 /* GlamAR in Frameworks */,
@@ -107,6 +113,9 @@
 				6112C2402E680EC1007897F1 /* GlamAR */,
 				6112C2432E680FA0007897F1 /* GlamAR */,
 				612E3F492E684E8E000D0F13 /* GlamAR */,
+				612E3F4C2E6EB8EE000D0F13 /* GlamAR */,
+				612E3F4F2E6EB923000D0F13 /* GlamAR */,
+				612E3F522E6FF5BA000D0F13 /* GlamAR */,
 			);
 			productName = Example;
 			productReference = 14A0FAC02C805EDA002193F3 /* Example.app */;
@@ -137,7 +146,7 @@
 			);
 			mainGroup = 14A0FAB72C805EDA002193F3;
 			packageReferences = (
-				612E3F482E684E8E000D0F13 /* XCLocalSwiftPackageReference "../../glamar-swift" */,
+				612E3F512E6FF5BA000D0F13 /* XCRemoteSwiftPackageReference "glamar-swift" */,
 			);
 			productRefGroup = 14A0FAC12C805EDA002193F3 /* Products */;
 			projectDirPath = "";
@@ -403,12 +412,16 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		612E3F482E684E8E000D0F13 /* XCLocalSwiftPackageReference "../../glamar-swift" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = "../../glamar-swift";
+/* Begin XCRemoteSwiftPackageReference section */
+		612E3F512E6FF5BA000D0F13 /* XCRemoteSwiftPackageReference "glamar-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pixelbin-io/glamar-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		6112C2402E680EC1007897F1 /* GlamAR */ = {
@@ -421,6 +434,19 @@
 		};
 		612E3F492E684E8E000D0F13 /* GlamAR */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = GlamAR;
+		};
+		612E3F4C2E6EB8EE000D0F13 /* GlamAR */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GlamAR;
+		};
+		612E3F4F2E6EB923000D0F13 /* GlamAR */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GlamAR;
+		};
+		612E3F522E6FF5BA000D0F13 /* GlamAR */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 612E3F512E6FF5BA000D0F13 /* XCRemoteSwiftPackageReference "glamar-swift" */;
 			productName = GlamAR;
 		};
 		61A642372E1E4425002076AE /* GlamAR */ = {

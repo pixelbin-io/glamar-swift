@@ -110,6 +110,10 @@ To use GlamAR in your iOS application, you need to initialize it with your acces
 ```swift
 import GlamAR
 
+let overrides = GlamAROverrides(
+    meta: ["sdkVersion" : "2.0.0"]
+)
+
 // In your AppDelegate
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Initialize GlamAR with all available options
@@ -117,8 +121,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
         accessKey: "YOUR_ACCESS_KEY",
         debug: true,  // Use debug environment (true) or production (false)
         bundleIdentifier: String = Bundle.main.bundleIdentifier ?? "", // Used for parent domain reference
-        overrides: GlamAROverrides? = nil, // Optional override configuration
-        webView: WKWebView? = nil) // Optional: Pass a pre-configured WKWebView
+        overrides: overrides) // Optional: Pass a pre-configured WKWebView
     )
     return true
 }
@@ -170,11 +173,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var glamARWebView: WKWebView!
 
     @IBAction func onApplyClick(_ sender: Any) {
-        GlamAr.applySku("666b311f-1b34-4082-99d1-c525451b44a1")
+        GlamAr.applyByCategory(category: "sunglasses")
     }
 
     @IBAction func onClearClick(_ sender: Any) {
         GlamAr.close()
+    }
+    
+    @IBAction func onToggleClick(_ sender: Any) {
+        GlamAr.skinAnalysis(options: "start")
     }
 
     @IBAction func onExportClick(_ sender: Any) {

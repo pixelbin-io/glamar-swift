@@ -1,5 +1,5 @@
 {
-  "originHash" : "bb161d7d05f75bf9be3b4255565f388569f2a283891a338cbcf18c118e35e58a",
+  "originHash" : "ff6cae977eb1fa091a9b0e761c575f57f8fa4e3baa9d60977cbab9a386caf46d",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
         "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "glamar-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pixelbin-io/glamar-swift.git",
+      "state" : {
+        "revision" : "5c363bd254b92f973cba1f016d33dffbb06de8c8",
+        "version" : "1.0.2"
       }
     }
   ],
