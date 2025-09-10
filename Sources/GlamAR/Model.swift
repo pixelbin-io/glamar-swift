@@ -12,6 +12,11 @@ public struct SkuListResponse: Decodable {
     public let items: [Item]
 }
 
+public struct VersionResponse: Decodable {
+    public let success: Bool
+    public let sdkVersion: String?
+}
+
 public struct SkuItemResponse: Decodable {
     public let item: Item
     enum CodingKeys: String, CodingKey {
@@ -119,14 +124,10 @@ public struct GlobalConfig {
 }
 
 public struct SkinAnalysisConfig {
-    public var version: String?
-    public var defaultFilter: Bool?
-    public var startScreen: Bool?
+    public var appId: String?
 
-    public init(version: String? = nil, defaultFilter: Bool? = nil, startScreen: Bool? = nil) {
-        self.version = version
-        self.defaultFilter = defaultFilter
-        self.startScreen = startScreen
+    public init(appId: String? = nil) {
+        self.appId = appId
     }
 }
 

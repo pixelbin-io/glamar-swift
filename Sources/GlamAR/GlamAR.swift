@@ -13,6 +13,7 @@ public class GlamAr {
     
     let accessKey: String
     let debug: Bool
+    public let api: GlamArApi
     
     private static var instance: GlamAr?
     
@@ -23,6 +24,7 @@ public class GlamAr {
                  webView: WKWebView? = nil) {
         self.accessKey = accessKey
         self.debug = debug
+        self.api = GlamArApi(accessKey: accessKey, debug: debug)
     }
     
     public static func initialize(accessKey: String,
@@ -67,20 +69,40 @@ public class GlamAr {
         evaluateJavascript(script: "window.parent.postMessage({ type: 'applyBySku', payload: { skuId: '\(skuId)' } }, '*');")
     }
     
+    public static func applyByCategory(category: String) {
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'applyByCategory' , payload: '\(category)'  }, '*');")
+    }
+    
+    public static func applyByMultipleConfigData(config: Any) {
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'applyByMultipleConfigData' , payload: '\(config)'  }, '*');")
+    }
+    
+    public static func onAddedToCart(skuId: String) {
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'addedToCart',payload:$skuId } , '*');")
+    }
+    
+    public static func onAddedToWishlist(skuId: String) {
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'addedToWishlist',payload:$skuId } , '*');")
+    }
+    
     public static func applyPatternId(_ patternId: String) {
         evaluateJavascript(script: "window.parent.postMessage({ type: 'applyPatternByID', payload: { patternId: '\(patternId)' } }, '*');")
     }
     
-    public static func open() {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'openLivePreview' }, '*');")
-    }
-    
-    public static func openUploadMode(imgUrl: String) {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'openLivePreview', payload: { mode: 'imgTryOn', imgURL: '\(imgUrl)' } }, '*');")
+    public static func open(mode: String? = nil, imgURL: String? = nil) {
+        if(mode != nil) {
+            evaluateJavascript(script: "window.parent.postMessage({ type: 'openLivePreview' , payload: { mode:'\(mode)', imgURL: '\(imgURL)' } }, '*');")
+        } else {
+            evaluateJavascript(script: "window.parent.postMessage({ type: 'openLivePreview' }, '*');")
+        }
     }
     
     public static func close() {
         evaluateJavascript(script: "window.parent.postMessage({ type: 'closePreview' }, '*');")
+    }
+    
+    public static func back() {
+        evaluateJavascript(script:  "window.parent.postMessage({ type: 'backPreview'}, '*');")
     }
     
     public static func snapshot() {
@@ -95,21 +117,16 @@ public class GlamAr {
         return GlamArWebViewManager.shared.isWebViewLoaded
     }
     
-    public static func comparison(option: String, value: String) {
-        let script = """
-            window.parent.postMessage({
-                type: 'comparison',
-                payload: {
-                    options: '\(option)',
-                    value: '\(value)'
-                }
-            }, '*');
-            """
-        evaluateJavascript(script: script)
+    public static func skinAnalysis(options: String) {
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'skinAnalysis' , payload: { options: '\(options)' }  }, '*');")
     }
     
-    public static func skinAnalysis(options: String, category: String) {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'skin-analysis', payload: { options: '\(options)', value: '\(category)' } }, '*');")
+    public static func eyePD(options: String) {
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'eyePD' , payload: { options: '\(options)' }  }, '*');")
+    }
+    
+    public static func openUI(name: String) {
+        evaluateJavascript(script: "window.parent.postMessage({ type: 'openUi' , payload: { name: '\(name)' }  }, '*');")
     }
 }
 

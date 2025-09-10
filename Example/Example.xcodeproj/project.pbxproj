@@ -13,9 +13,14 @@
 		14A0FACB2C805EDA002193F3 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 14A0FACA2C805EDA002193F3 /* Base */; };
 		14A0FACD2C805EDC002193F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14A0FACC2C805EDC002193F3 /* Assets.xcassets */; };
 		14A0FAD02C805EDC002193F3 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 14A0FACF2C805EDC002193F3 /* Base */; };
+		6112C2412E680EC1007897F1 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 6112C2402E680EC1007897F1 /* GlamAR */; };
+		6112C2442E680FA0007897F1 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 6112C2432E680FA0007897F1 /* GlamAR */; };
+		612E3F4A2E684E8E000D0F13 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 612E3F492E684E8E000D0F13 /* GlamAR */; };
+		612E3F4D2E6EB8EE000D0F13 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 612E3F4C2E6EB8EE000D0F13 /* GlamAR */; };
+		612E3F502E6EB923000D0F13 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 612E3F4F2E6EB923000D0F13 /* GlamAR */; };
+		612E3F532E6FF5BA000D0F13 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 612E3F522E6FF5BA000D0F13 /* GlamAR */; };
 		619DD1942D27C40B003434B4 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DD1932D27C40B003434B4 /* FirstViewController.swift */; };
 		61A642382E1E4425002076AE /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 61A642372E1E4425002076AE /* GlamAR */; };
-		61A6423E2E1E46BA002076AE /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 61A6423D2E1E46BA002076AE /* GlamAR */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +40,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61A6423E2E1E46BA002076AE /* GlamAR in Frameworks */,
+				612E3F532E6FF5BA000D0F13 /* GlamAR in Frameworks */,
+				612E3F502E6EB923000D0F13 /* GlamAR in Frameworks */,
+				612E3F4D2E6EB8EE000D0F13 /* GlamAR in Frameworks */,
+				6112C2442E680FA0007897F1 /* GlamAR in Frameworks */,
+				6112C2412E680EC1007897F1 /* GlamAR in Frameworks */,
+				612E3F4A2E684E8E000D0F13 /* GlamAR in Frameworks */,
 				61A642382E1E4425002076AE /* GlamAR in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,7 +110,12 @@
 			name = Example;
 			packageProductDependencies = (
 				61A642372E1E4425002076AE /* GlamAR */,
-				61A6423D2E1E46BA002076AE /* GlamAR */,
+				6112C2402E680EC1007897F1 /* GlamAR */,
+				6112C2432E680FA0007897F1 /* GlamAR */,
+				612E3F492E684E8E000D0F13 /* GlamAR */,
+				612E3F4C2E6EB8EE000D0F13 /* GlamAR */,
+				612E3F4F2E6EB923000D0F13 /* GlamAR */,
+				612E3F522E6FF5BA000D0F13 /* GlamAR */,
 			);
 			productName = Example;
 			productReference = 14A0FAC02C805EDA002193F3 /* Example.app */;
@@ -131,7 +146,7 @@
 			);
 			mainGroup = 14A0FAB72C805EDA002193F3;
 			packageReferences = (
-				61A6423C2E1E46BA002076AE /* XCRemoteSwiftPackageReference "glamar-swift" */,
+				612E3F512E6FF5BA000D0F13 /* XCRemoteSwiftPackageReference "glamar-swift" */,
 			);
 			productRefGroup = 14A0FAC12C805EDA002193F3 /* Products */;
 			projectDirPath = "";
@@ -398,7 +413,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		61A6423C2E1E46BA002076AE /* XCRemoteSwiftPackageReference "glamar-swift" */ = {
+		612E3F512E6FF5BA000D0F13 /* XCRemoteSwiftPackageReference "glamar-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pixelbin-io/glamar-swift.git";
 			requirement = {
@@ -409,13 +424,33 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		61A642372E1E4425002076AE /* GlamAR */ = {
+		6112C2402E680EC1007897F1 /* GlamAR */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GlamAR;
 		};
-		61A6423D2E1E46BA002076AE /* GlamAR */ = {
+		6112C2432E680FA0007897F1 /* GlamAR */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 61A6423C2E1E46BA002076AE /* XCRemoteSwiftPackageReference "glamar-swift" */;
+			productName = GlamAR;
+		};
+		612E3F492E684E8E000D0F13 /* GlamAR */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GlamAR;
+		};
+		612E3F4C2E6EB8EE000D0F13 /* GlamAR */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GlamAR;
+		};
+		612E3F4F2E6EB923000D0F13 /* GlamAR */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GlamAR;
+		};
+		612E3F522E6FF5BA000D0F13 /* GlamAR */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 612E3F512E6FF5BA000D0F13 /* XCRemoteSwiftPackageReference "glamar-swift" */;
+			productName = GlamAR;
+		};
+		61A642372E1E4425002076AE /* GlamAR */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = GlamAR;
 		};
 /* End XCSwiftPackageProductDependency section */
