@@ -33,7 +33,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let webview = GlamArWebViewManager.shared.getPreparedWebView() {
+        if let webview = GlamArWebViewManager.shared.getPreparedWebView(), (glamARWebView != nil) {
             
             glamARWebView.addSubview(webview)
             

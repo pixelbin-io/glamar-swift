@@ -88,7 +88,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="glamARWebView" destination="YgU-aj-ZsL" id="hCS-ff-jVo"/>
+                        <outlet property="glamARWebView" destination="YgU-aj-ZsL" id="Zjq-pH-Olg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c1f-l2-3EB" sceneMemberID="firstResponder"/>

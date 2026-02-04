@@ -61,9 +61,24 @@ public class GlamArApi {
             }
     }
     
-    public func getVersion(completion: @escaping (Result<String?, Error>) -> Void) {
+    public func getVersion(appId: String?, completion: @escaping (Result<String?, Error>) -> Void) {
         
-        let urlString = "\(baseURL)/service/private/misc/v3.0/sdk-settings/version"
+        var components = URLComponents(
+            string: "\(baseURL)/service/private/misc/v3.0/sdk-settings/version"
+        )
+        
+        if let appId = appId {
+            components?.queryItems = [
+                URLQueryItem(name: "appId", value: appId)
+            ]
+        }
+        
+        guard let urlString = components?.url else {
+            completion(.failure(URLError(.badURL)))
+            return
+        }
+        
+        print("Version Url:", urlString)
         
         let encodedKey = Data(accessKey.utf8).base64EncodedString()
         let headers: HTTPHeaders = [

@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pixelbin-io/glamar-swift.git",
       "state" : {
-        "revision" : "5c363bd254b92f973cba1f016d33dffbb06de8c8",
-        "version" : "1.0.2"
+        "revision" : "57c8379d11148171fa00c0ce5a4ae912be761b8f",
+        "version" : "2.0.3"
       }
     }
   ],

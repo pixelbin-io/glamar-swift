@@ -89,7 +89,7 @@ public class GlamArWebViewManager: NSObject {
         do {
             let api = try GlamAr.getInstance().api
             
-            api.getVersion { [weak self] result in
+            api.getVersion(appId: overrides?.configuration?.skinAnalysis?.appId) { [weak self] result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let sdkVersion):
