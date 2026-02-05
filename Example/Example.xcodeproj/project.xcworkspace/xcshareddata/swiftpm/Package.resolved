@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Alamofire/Alamofire.git",
       "state" : {
-        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
-        "version" : "5.10.2"
+        "revision" : "3f99050e75bbc6fe71fc323adabb039756680016",
+        "version" : "5.11.1"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pixelbin-io/glamar-swift.git",
       "state" : {
-        "revision" : "57c8379d11148171fa00c0ce5a4ae912be761b8f",
-        "version" : "2.0.3"
+        "revision" : "f7a1dfb320160737b39ebc2636a36b490a0d4f46",
+        "version" : "2.0.4"
       }
     }
   ],
