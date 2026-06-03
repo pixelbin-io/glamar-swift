@@ -64,6 +64,17 @@ public class GlamAr {
     static func evaluateJavascript(script: String) {
         GlamArWebViewManager.shared.evaluateJavaScript(script)
     }
+
+    private static func postMessage(type: String, payload: [String: Any]) {
+        guard JSONSerialization.isValidJSONObject(payload),
+              let jsonData = try? JSONSerialization.data(withJSONObject: payload),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            print("GlamAr: Failed to serialize payload for \(type)")
+            return
+        }
+
+        evaluateJavascript(script: "window.parent.postMessage({ type: '\(type)', payload: \(jsonString) }, '*');")
+    }
     
     public static func applySku(_ skuId: String) {
         evaluateJavascript(script: "window.parent.postMessage({ type: 'applyBySku', payload: { skuId: '\(skuId)' } }, '*');")
@@ -87,6 +98,27 @@ public class GlamAr {
     
     public static func applyPatternId(_ patternId: String) {
         evaluateJavascript(script: "window.parent.postMessage({ type: 'applyPatternByID', payload: { patternId: '\(patternId)' } }, '*');")
+    }
+
+    public static func comparison(state: String, skus: [String]) {
+        postMessage(type: "comparison", payload: [
+            "state": state,
+            "skus": skus
+        ])
+    }
+
+    public static func onNailColorEvents(options: String? = nil, value: Any? = nil) {
+        var payload: [String: Any] = [:]
+
+        if let options {
+            payload["options"] = options
+        }
+
+        if let value {
+            payload["value"] = value
+        }
+
+        postMessage(type: "nailColor", payload: payload)
     }
     
     public static func open(mode: String? = nil, imgURL: String? = nil) {
