@@ -107,6 +107,13 @@ public class GlamAr {
         ])
     }
 
+    public static func configChange(type: String, value: Double) {
+        postMessage(type: "onConfigChange", payload: [
+            "type": type,
+            "value": value
+        ])
+    }
+
     public static func onNailColorEvents(options: String? = nil, value: Any? = nil) {
         var payload: [String: Any] = [:]
 

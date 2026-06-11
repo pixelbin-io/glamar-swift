@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'GlamAR'
-  s.version      = '2.0.5'
+  s.version      = '2.0.6'
   s.summary      = 'Enhance your web applications with advanced Augmented Reality (AR) features using the GlamAR SDK.'
   s.description  = <<-DESC
     The GlamAR SDK enables developers to effortlessly integrate advanced Augmented Reality (AR) capabilities into their web applications. Utilizing machine learning and deep learning models, GlamAR tracks facial features and expressions, overlaying them with realistic 2D and 3D graphics in real-time. Ideal for creating immersive experiences like virtual try-ons for makeup, eyewear, accessories, nails, and hair, the SDK includes all the necessary components to help you focus on visual design while it handles the complex AR processes.
