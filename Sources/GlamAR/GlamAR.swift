@@ -148,8 +148,37 @@ public class GlamAr {
         evaluateJavascript(script: "window.parent.postMessage({ type: 'snapshot' }, '*');")
     }
     
-    public static func reset() {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'clearSku' }, '*');")
+    public static func reset(_ value: Any? = nil) {
+        sendClearSku(payload: normalizeClearSkuPayload(value))
+    }
+
+    private static func normalizeClearSkuPayload(_ value: Any?) -> [String: Any]? {
+        guard let value else { return nil }
+
+        if let subCategory = value as? String {
+            return subCategory.isEmpty ? nil : ["subCategory": subCategory]
+        }
+
+        guard let options = value as? [String: Any] else { return nil }
+        var payload: [String: Any] = [:]
+
+        if let subCategory = options["subCategory"] as? String, !subCategory.isEmpty {
+            payload["subCategory"] = subCategory
+        }
+
+        if let skuIds = options["skuIds"] as? [String], !skuIds.isEmpty {
+            payload["skuIds"] = skuIds
+        }
+
+        return payload.isEmpty ? nil : payload
+    }
+
+    private static func sendClearSku(payload: [String: Any]?) {
+        if let payload {
+            postMessage(type: "clearSku", payload: payload)
+        } else {
+            evaluateJavascript(script: "window.parent.postMessage({ type: 'clearSku' }, '*');")
+        }
     }
     
     public static func isLoaded() -> Bool {
