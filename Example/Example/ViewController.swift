@@ -15,11 +15,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var glamARWebView: WKWebView!
     
     @IBAction func onApplyClick(_ sender: Any) {
-        GlamAr.applyByCategory(category: "sunglasses")
+      GlamAr.applySku("e823e409-324f-44f8-8708-6463f89d36a5")
     }
     
     @IBAction func onClearClick(_ sender: Any) {
-        GlamAr.close()
+        GlamAr.reset(["skuIds": ["e823e409-324f-44f8-8708-6463f89d36a5"]])
     }
     
     @IBAction func onToggleClick(_ sender: Any) {
@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onExportClick(_ sender: Any) {
-        GlamAr.snapshot()
+      GlamAr.applySku("694b5a2f-1d9d-4448-a0c9-27a4b6917cd9")
     }
     
     override func viewDidLoad() {
