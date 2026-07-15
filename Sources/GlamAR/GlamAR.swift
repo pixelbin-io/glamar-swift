@@ -127,6 +127,11 @@ public class GlamAr {
 
         postMessage(type: "nailColor", payload: payload)
     }
+
+    public static func setViewportMirrored(state: Bool) {
+        let option = state ? "start" : "close"
+        postMessage(type: "mirrorMode", payload: ["options": option])
+    }
     
     public static func open(mode: String? = nil, imgURL: String? = nil) {
         if(mode != nil) {
