@@ -418,7 +418,7 @@
 			repositoryURL = "https://github.com/pixelbin-io/glamar-swift.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.6;
+				minimumVersion = 2.0.8;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -107,11 +107,27 @@ public class GlamAr {
         ])
     }
 
-    public static func configChange(type: String, value: Double) {
-        postMessage(type: "onConfigChange", payload: [
-            "type": type,
-            "value": value
-        ])
+    public static func configChange(
+        type: String,
+        value: Double? = nil,
+        skuId: String? = nil,
+        subCategory: String? = nil
+    ) {
+        var payload: [String: Any] = ["type": type]
+
+        if let value {
+            payload["value"] = value
+        }
+
+        if let skuId {
+            payload["skuId"] = skuId
+        }
+
+        if let subCategory {
+            payload["subCategory"] = subCategory
+        }
+
+        postMessage(type: "onConfigChange", payload: payload)
     }
 
     public static func onNailColorEvents(options: String? = nil, value: Any? = nil) {
@@ -126,6 +142,11 @@ public class GlamAr {
         }
 
         postMessage(type: "nailColor", payload: payload)
+    }
+
+    public static func setViewportMirrored(state: Bool) {
+        let option = state ? "start" : "close"
+        postMessage(type: "mirrorMode", payload: ["options": option])
     }
     
     public static func open(mode: String? = nil, imgURL: String? = nil) {
