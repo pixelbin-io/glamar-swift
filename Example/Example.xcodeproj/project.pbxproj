@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,7 @@
 		619DD1942D27C40B003434B4 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619DD1932D27C40B003434B4 /* FirstViewController.swift */; };
 		61A642382E1E4425002076AE /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 61A642372E1E4425002076AE /* GlamAR */; };
 		8E53E86130513F79005A6599 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 8E53E86030513F79005A6599 /* GlamAR */; };
+		8E9E58F73052A0F000331872 /* GlamAR in Frameworks */ = {isa = PBXBuildFile; productRef = 8E9E58F63052A0F000331872 /* GlamAR */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 			files = (
 				612E3F502E6EB923000D0F13 /* GlamAR in Frameworks */,
 				8E53E86130513F79005A6599 /* GlamAR in Frameworks */,
+				8E9E58F73052A0F000331872 /* GlamAR in Frameworks */,
 				612E3F4D2E6EB8EE000D0F13 /* GlamAR in Frameworks */,
 				6112C2442E680FA0007897F1 /* GlamAR in Frameworks */,
 				6112C2412E680EC1007897F1 /* GlamAR in Frameworks */,
@@ -116,6 +118,7 @@
 				612E3F4C2E6EB8EE000D0F13 /* GlamAR */,
 				612E3F4F2E6EB923000D0F13 /* GlamAR */,
 				8E53E86030513F79005A6599 /* GlamAR */,
+				8E9E58F63052A0F000331872 /* GlamAR */,
 			);
 			productName = Example;
 			productReference = 14A0FAC02C805EDA002193F3 /* Example.app */;
@@ -146,7 +149,7 @@
 			);
 			mainGroup = 14A0FAB72C805EDA002193F3;
 			packageReferences = (
-				8E53E85F30513F79005A6599 /* XCLocalSwiftPackageReference "../../GlamAR" */,
+				8E9E58F53052A0F000331872 /* XCRemoteSwiftPackageReference "glamar-swift" */,
 			);
 			productRefGroup = 14A0FAC12C805EDA002193F3 /* Products */;
 			projectDirPath = "";
@@ -412,12 +415,16 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		8E53E85F30513F79005A6599 /* XCLocalSwiftPackageReference "../../GlamAR" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../GlamAR;
+/* Begin XCRemoteSwiftPackageReference section */
+		8E9E58F53052A0F000331872 /* XCRemoteSwiftPackageReference "glamar-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pixelbin-io/glamar-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.8;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		6112C2402E680EC1007897F1 /* GlamAR */ = {
@@ -446,6 +453,11 @@
 		};
 		8E53E86030513F79005A6599 /* GlamAR */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = GlamAR;
+		};
+		8E9E58F63052A0F000331872 /* GlamAR */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8E9E58F53052A0F000331872 /* XCRemoteSwiftPackageReference "glamar-swift" */;
 			productName = GlamAR;
 		};
 /* End XCSwiftPackageProductDependency section */
