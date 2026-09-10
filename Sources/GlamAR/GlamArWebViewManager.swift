@@ -15,7 +15,7 @@ public class GlamArWebViewManager: NSObject {
     private override init() {}
     
     private let prodUrl = "https://cdn.glamar.io/sdk"
-    private let stagingUrl = "https://cdn.glamarz0.de/sdk"
+    private let stagingUrl = "https://cdn.glamar.io/sdk"
     
     private let apiurl = "https://api.pixelbin.io"
     
@@ -270,7 +270,7 @@ extension GlamArWebViewManager: WKNavigationDelegate, WKUIDelegate {
     @available(iOS 15.0, *)
     public func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
         
-        return (origin.host == "cdn.glamarz0.de" || origin.host == "cdn.glamar.io") ? .grant : .deny
+        return (origin.host == "cdn.glamar.io" || origin.host == "cdn.glamar.io") ? .grant : .deny
     }
 }
 
