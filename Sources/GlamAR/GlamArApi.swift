@@ -29,13 +29,6 @@ public class GlamArApi {
         return self.debug ? "https://api.glamar.fynd.com" : "https://api.glamar.fynd.com"
     }
 
-    private var versionAPIBaseURLs: [String] {
-        return [
-            "\(glamARBaseURL)/service/private/glamar",
-            "\(baseURL)/service/private/misc"
-        ]
-    }
-    
     public func fetchSkuList(pageNo: Int, pageSize: Int, completion: @escaping (Result<SkuListResponse, Error>) -> Void) {
         let url = "\(baseURL)/service/private/misc/v1.0/skus"
         let headers: HTTPHeaders = [
@@ -73,17 +66,8 @@ public class GlamArApi {
     }
     
     public func getVersion(appId: String?, completion: @escaping (Result<String?, Error>) -> Void) {
-        fetchVersion(appId: appId, from: versionAPIBaseURLs, completion: completion)
-    }
-
-    private func fetchVersion(appId: String?, from baseURLs: [String], completion: @escaping (Result<String?, Error>) -> Void) {
-        guard let versionBaseURL = baseURLs.first else {
-            completion(.failure(URLError(.badServerResponse)))
-            return
-        }
-
         var components = URLComponents(
-            string: "\(versionBaseURL)/v3.0/sdk-settings/version"
+            string: "\(glamARBaseURL)/service/private/glamar/v3.0/sdk-settings/version"
         )
         
         if let appId = appId {
@@ -114,15 +98,7 @@ public class GlamArApi {
                 case .success(let versionResponse):
                     completion(.success(versionResponse.sdkVersion))
                 case .failure(let error):
-                    let fallbackBaseURLs = Array(baseURLs.dropFirst())
-
-                    guard !fallbackBaseURLs.isEmpty else {
-                        completion(.failure(error))
-                        return
-                    }
-
-                    print("Version API failed for \(url). Trying fallback.")
-                    self.fetchVersion(appId: appId, from: fallbackBaseURLs, completion: completion)
+                    completion(.failure(error))
                 }
             }
     }

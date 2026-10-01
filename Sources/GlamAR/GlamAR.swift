@@ -76,12 +76,97 @@ public class GlamAr {
         evaluateJavascript(script: "window.parent.postMessage({ type: '\(type)', payload: \(jsonString) }, '*');")
     }
     
+    /// Switches to VTO using the first nonblank category, subCategory, or skuId, in that order.
+    public static func setExperience(experience: String, options: VtoExperienceOptions) {
+        setExperienceInternal(experience: experience, options: options)
+    }
+
+    /// Switches to Skin Analysis using a nonblank appId.
+    public static func setExperience(experience: String, options: SkinAnalysisExperienceOptions) {
+        setExperienceInternal(experience: experience, options: options)
+    }
+
+    private static func setExperienceInternal(experience: String, options: ExperienceOptions) {
+        if experience == "skinAnalysis" {
+            let appId = normalizeExperienceValue((options as? SkinAnalysisExperienceOptions)?.appId)
+            guard !appId.isEmpty else {
+                failExperienceChange(experience: experience, error: "SkinAnalysis experience requires a valid appId")
+                return
+            }
+            sendExperienceChange(experience: experience, options: ["appId": appId])
+            return
+        }
+
+        guard experience == "vto" else {
+            failExperienceChange(experience: experience, error: "Experience must be either vto or skinAnalysis")
+            return
+        }
+
+        let vtoOptions = options as? VtoExperienceOptions
+        for (key, value) in [
+            ("category", vtoOptions?.category),
+            ("subCategory", vtoOptions?.subCategory),
+            ("skuId", vtoOptions?.skuId)
+        ] {
+            let normalizedValue = normalizeExperienceValue(value)
+            if !normalizedValue.isEmpty {
+                sendExperienceChange(experience: experience, options: [key: normalizedValue])
+                return
+            }
+        }
+
+        failExperienceChange(experience: experience, error: "VTO experience requires category, subCategory, or skuId")
+    }
+
+    private static func normalizeExperienceValue(_ value: String?) -> String {
+        return value?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    }
+
+    private static func sendExperienceChange(experience: String, options: [String: String]) {
+        postMessage(type: "setExperience", payload: [
+            "experience": experience,
+            "options": options
+        ])
+    }
+
+    private static func failExperienceChange(experience: String, error: String) {
+        print("GlamAr: \(error)")
+        GlamArEventManager.shared.dispatchEvent(event: "experience-change-failed", payload: [
+            "experience": experience,
+            "error": error
+        ])
+    }
+
     public static func applySku(_ skuId: String) {
         evaluateJavascript(script: "window.parent.postMessage({ type: 'applyBySku', payload: { skuId: '\(skuId)' } }, '*');")
     }
     
-    public static func applyByCategory(category: String) {
-        evaluateJavascript(script: "window.parent.postMessage({ type: 'applyByCategory' , payload: '\(category)'  }, '*');")
+    /// Applies a category with optional catalog settings.
+    public static func applyByCategory(category: String, options: ApplyCatalogOptions? = nil) {
+        applyCatalog(type: "applyByCategory", key: "category", value: category, options: options)
+    }
+
+    /// Applies a subcategory with optional catalog settings.
+    public static func applyBySubCategory(subCategory: String, options: ApplyCatalogOptions? = nil) {
+        applyCatalog(type: "applyBySubCategory", key: "subCategory", value: subCategory, options: options)
+    }
+
+    private static func applyCatalog(type: String, key: String, value: String, options: ApplyCatalogOptions?) {
+        guard let options else {
+            guard let jsonData = try? JSONEncoder().encode(value),
+                  let jsonString = String(data: jsonData, encoding: .utf8) else {
+                print("GlamAr: Failed to serialize payload for \(type)")
+                return
+            }
+            evaluateJavascript(script: "window.parent.postMessage({ type: '\(type)', payload: \(jsonString) }, '*');")
+            return
+        }
+
+        var optionsPayload: [String: String] = [:]
+        if let storeFront = options.storeFront {
+            optionsPayload["storeFront"] = storeFront
+        }
+        postMessage(type: type, payload: [key: value, "options": optionsPayload])
     }
     
     public static func applyByMultipleConfigData(config: Any) {

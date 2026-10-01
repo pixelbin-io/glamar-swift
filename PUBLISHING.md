@@ -23,8 +23,8 @@ pod lib lint GlamAR.podspec --allow-warnings
 The podspec uses `tag: s.version.to_s`, so the remote git tag must exactly match the version in `GlamAR.podspec`.
 
 ```bash
-git tag 2.0.6
-git push origin 2.0.6
+git tag 3.0.0
+git push origin 3.0.0
 ```
 
 ### 3. Validate the Remote Podspec 

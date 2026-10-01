@@ -219,6 +219,54 @@ class ViewController: UIViewController {
 }
 ```
 
+## Applying Categories and Subcategories
+
+Both methods accept optional `ApplyCatalogOptions`:
+
+```swift
+// Calls without options use the original string payload format.
+GlamAr.applyByCategory(category: "eyewear")
+GlamAr.applyBySubCategory(subCategory: "sunglasses")
+
+// Include storefront options when needed.
+let catalogOptions = ApplyCatalogOptions(storeFront: "YOUR_STOREFRONT")
+GlamAr.applyByCategory(category: "eyewear", options: catalogOptions)
+GlamAr.applyBySubCategory(subCategory: "sunglasses", options: catalogOptions)
+```
+
+Omitting `options` or passing `nil` sends the category or subcategory as a string. Passing an options value sends an object containing `category` or `subCategory` and `options`. A nil `storeFront` is omitted, so `ApplyCatalogOptions()` sends an empty options object. Values are preserved as supplied, including empty strings and whitespace.
+
+## Switching Experiences
+
+After SDK initialization completes, use `setExperience` to switch between VTO and Skin Analysis:
+
+```swift
+GlamAr.setExperience(
+    experience: "vto",
+    options: VtoExperienceOptions(category: "sunglasses")
+)
+
+GlamAr.setExperience(
+    experience: "skinAnalysis",
+    options: SkinAnalysisExperienceOptions(appId: "YOUR_APP_ID")
+)
+```
+
+`VtoExperienceOptions` accepts `category`, `subCategory`, or `skuId`. Values are trimmed, and only the first nonblank value is sent, in that order. For example, use `VtoExperienceOptions(skuId: "YOUR_SKU_ID")` to select a specific SKU. `SkinAnalysisExperienceOptions` requires a nonblank `appId`.
+
+Experience names are case-sensitive: `"vto"` and `"skinAnalysis"`. Use the matching options type for each experience. Invalid names, missing required values, or mismatched options emit `experience-change-failed` without sending a JavaScript request:
+
+```swift
+GlamAr.addEventListener(event: "experience-change-failed") { payload in
+    guard let failure = payload as? [String: Any],
+          let experience = failure["experience"] as? String,
+          let error = failure["error"] as? String else { return }
+    print("Failed to switch to \(experience): \(error)")
+}
+```
+
+Register the listener after calling `GlamAr.initialize` and before calling `setExperience`.
+
 ## Permissions
 
 Ensure you handle permissions appropriately, especially for camera access if using `PreviewMode.camera`. Add the necessary privacy usage descriptions to your `Info.plist`:
