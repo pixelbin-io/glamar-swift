@@ -87,6 +87,36 @@ public struct Attribute: Decodable {
     public let effectAssets: [String]
 }
 
+public struct ApplyCatalogOptions {
+    public var storeFront: String?
+
+    public init(storeFront: String? = nil) {
+        self.storeFront = storeFront
+    }
+}
+
+public protocol ExperienceOptions {}
+
+public struct VtoExperienceOptions: ExperienceOptions {
+    public var category: String?
+    public var subCategory: String?
+    public var skuId: String?
+
+    public init(category: String? = nil, subCategory: String? = nil, skuId: String? = nil) {
+        self.category = category
+        self.subCategory = subCategory
+        self.skuId = skuId
+    }
+}
+
+public struct SkinAnalysisExperienceOptions: ExperienceOptions {
+    public var appId: String?
+
+    public init(appId: String? = nil) {
+        self.appId = appId
+    }
+}
+
 public struct GlamAROverrides {
     public var category: String?
     public var configuration: Configuration?
